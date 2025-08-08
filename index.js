@@ -1,7 +1,6 @@
 import Fastify from "fastify";
-import firstRoute from './our-first-route.js'
-import dbConnector from "./our-db-connector.js";
-const fastify = Fastify({ logger: true });
+import dbConnector from "./config/db.js";
+const fastify = Fastify({ logger: true }); //logger keeps logging the things that we need to do with console.log manually in express
 
 // //define the port
 const port = 5000;
@@ -27,10 +26,19 @@ const port = 5000;
 //   return { reply: "hello world" };
 // });we are importing it from an external file
 
-
 //NOTE: As with JavaScript, where everything is an object, with Fastify everything is a plugin.
-fastify.register(firstRoute)//we used the register API, which is the core of the Fastify framework. It is the only way to add routes, plugins, et cetera.
+// fastify.register(firstRoute)//we used the register API, which is the core of the Fastify framework. It is the only way to add routes, plugins, et cetera.
 fastify.register(dbConnector);
+
+//mock route
+fastify.get('/',(request, reply)=>{
+  reply.send("Hey World");
+})
+//route to get the collection from the database
+// fastify.get("/collection", (request, reply) => {
+//   const collection = fastify.mongo.db.collection("sample_mflix");
+//   reply.send({collection});
+// });
 
 const appStart = async () => {
   try {
@@ -41,4 +49,4 @@ const appStart = async () => {
   }
 };
 
-appStart()//started the app now
+appStart(); //started the app now
